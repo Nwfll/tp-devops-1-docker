@@ -1,0 +1,11 @@
+---
+- name: Run PostgreSQL container
+  docker_container:
+    name: postgres_db
+    image: postgres:13
+    env:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
+    networks:
+      - name: my_app_net
