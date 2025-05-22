@@ -3,8 +3,9 @@
   docker_container:
     name: simple-api
     image: nawfelbouzidi/tp-devops-simple-api
-    ports:
-      - "5000:5000"
     networks:
       - name: my_app_net
     restart_policy: always
+    env:
+      DATABASE_HOST: pg_db
+      DATABASE_PASSWORD: pwd

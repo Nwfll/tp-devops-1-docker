@@ -22,12 +22,8 @@ jobs:
         working-directory: simple-api
       
       - name: Analyze with SonarCloud
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=Nwfll_tp-devops-1-docker -Dsonar.organization=nwfll -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} 
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=Nwfll_tp-devops-1-docker -Dsonar.organization=nwfll -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         working-directory: simple-api
-
-      
-
-      
 
   build-and-push-docker-image:
     needs: test-backend
@@ -59,3 +55,16 @@ jobs:
           context: http-server
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}
+
+  deploy:
+    needs: continuous-deployment
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: sudo apt update && sudo apt install -y ansible
+
+      - name: Run Ansible Playbook
+        run: ansible-playbook -i inventories/setup.yml playbook.yml
