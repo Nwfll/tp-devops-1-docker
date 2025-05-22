@@ -56,15 +56,24 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           push: ${{ github.ref == 'refs/heads/main' }}
 
-  deploy:
-    needs: continuous-deployment
-    runs-on: ubuntu-24.04
+  deploy-to-server:
+    needs: evaluate-performances
+    runs-on: ubuntu-latest
+ 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install Ansible
-        run: sudo apt update && sudo apt install -y ansible
-
-      - name: Run Ansible Playbook
-        run: ansible-playbook -i ansible/inventories/setup.yml ansible/playbook.yml
+ 
+      - name: Set up SSH key and known hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H nawfel.bouzidi.takima.cloud >> ~/.ssh/known_hosts
+ 
+      - name: Run ansible-playbook on remote server
+        working-directory: ansible
+        run: |
+          ansible-playbook -i inventories/setup.yml playbook.yml
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: false
