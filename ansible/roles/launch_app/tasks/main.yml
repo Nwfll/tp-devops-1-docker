@@ -3,6 +3,7 @@
   docker_container:
     name: simple-api
     image: nawfelbouzidi/tp-devops-simple-api
+    pull: yes
     networks:
       - name: my_app_net
     restart_policy: always

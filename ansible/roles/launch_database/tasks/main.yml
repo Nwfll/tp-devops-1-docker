@@ -3,6 +3,7 @@
   docker_container:
     name: pg_db
     image: nawfelbouzidi/tp-devops-database
+    pull: yes
     env:
       POSTGRES_PASSWORD=pwd
     networks:
