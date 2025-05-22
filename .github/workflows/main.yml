@@ -25,7 +25,7 @@ jobs:
         run: mvn -B verify sonar:sonar -Dsonar.projectKey=Nwfll_tp-devops-1-docker -Dsonar.organization=nwfll -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         working-directory: simple-api
 
-  build-and-push-docker-image:
+  continuous-deployment:
     needs: test-backend
     runs-on: ubuntu-24.04
     steps:
