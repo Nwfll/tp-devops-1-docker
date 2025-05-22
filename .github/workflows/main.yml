@@ -57,7 +57,7 @@ jobs:
           push: ${{ github.ref == 'refs/heads/main' }}
 
   deploy-to-server:
-    needs: evaluate-performances
+    needs: continuous-deployment
     runs-on: ubuntu-latest
  
     steps:
